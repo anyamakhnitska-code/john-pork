@@ -2,7 +2,6 @@ import pygame
 import sys
 import os
 import subprocess
-import time
 
 # ---------- АВТОШЛЯХ ----------
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -22,12 +21,13 @@ clock = pygame.time.Clock()
 
 # ---------- ЗАВАНТАЖЕННЯ ----------
 try:
-    bg = pygame.image.load(os.path.join(BASE_DIR, "img", "john pork.jpg"))
+    # ВИПРАВЛЕНО: назви файлів збігаються з папкою img
+    bg = pygame.image.load(os.path.join(BASE_DIR, "img", "john_pork.jpg"))
     bg = pygame.transform.scale(bg, (WIDTH, HEIGHT))
-    pick_up = pygame.image.load(os.path.join(BASE_DIR, "img", "pick up.png")).convert_alpha()
+    pick_up = pygame.image.load(os.path.join(BASE_DIR, "img", "pick_up.png")).convert_alpha()
     decline = pygame.image.load(os.path.join(BASE_DIR, "img", "decline.png")).convert_alpha()
 except Exception as e:
-    print(f"Помилка: {e}")
+    print(f"Помилка завантаження ресурсів: {e}")
 
 font_title = pygame.font.SysFont("Arial", 48, bold=True)
 font_hacker = pygame.font.SysFont("Consolas", 30, bold=True)
@@ -40,22 +40,14 @@ if os.path.exists(sound_path):
 # ---------- ФУНКЦІЇ ----------
 
 def launch_video():
-    """Найбільш сумісний спосіб запуску відео для Windows 10/11"""
     video_path = os.path.join(BASE_DIR, "singing.mp4")
-    
-    # Використовуємо 'start', щоб Windows сама відкрила файл у програмі за замовчуванням
-    # (Медіапрогравач, який на скріншоті)
     try:
         os.startfile(video_path)
     except:
-        # Якщо startfile не спрацював, пробуємо через shell команду
         subprocess.Popen(f'start "" "{video_path}"', shell=True)
 
 def draw_hacked_ui():
-    """Екран, що показує злам у самому вікні програми"""
-    screen.fill((0, 0, 0)) # Чорний фон
-    
-    # Малюємо червону рамку «УВАГА»
+    screen.fill((0, 0, 0))
     pygame.draw.rect(screen, (255, 0, 0), (20, 20, WIDTH-40, HEIGHT-40), 5)
     
     lines = [
@@ -69,7 +61,6 @@ def draw_hacked_ui():
         "PAY 1,000,000 PORK-COINS TO UNLOCK",
         "OR YOUR PC WILL BE TURNED INTO BACON",
         "-----------------------------------",
-        "IP: [HIDDEN]",
         "STATUS: SPREADING VIRUS..."
     ]
     
@@ -79,7 +70,6 @@ def draw_hacked_ui():
         text = font_hacker.render(line, True, color)
         screen.blit(text, (WIDTH // 2 - text.get_width() // 2, y))
         y += 50
-    
     pygame.display.update()
 
 # ---------- ГОЛОВНИЙ ЦИКЛ ----------
@@ -95,15 +85,14 @@ while running:
 
         if event.type == pygame.MOUSEBUTTONDOWN and not hacked_mode:
             mx, my = pygame.mouse.get_pos()
+            # Область кнопки "Прийняти"
             pick_rect = pick_up.get_rect(topleft=GREEN_BTN_POS)
-            
             if pick_rect.collidepoint(mx, my):
                 pygame.mixer.music.stop()
                 hacked_mode = True
-                # Спочатку малюємо екран зламу, щоб він вже був там, коли відео відкриється
-                draw_hacked_ui()
                 launch_video()
             
+            # Область кнопки "Відхилити"
             decline_rect = decline.get_rect(topleft=RED_BTN_POS)
             if decline_rect.collidepoint(mx, my):
                 running = False
@@ -116,7 +105,6 @@ while running:
         screen.blit(pick_up, GREEN_BTN_POS)
         pygame.display.update()
     else:
-        # Постійно відображаємо екран зламу
         draw_hacked_ui()
 
 pygame.quit()
