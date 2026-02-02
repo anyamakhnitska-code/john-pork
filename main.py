@@ -22,9 +22,9 @@ clock = pygame.time.Clock()
 
 # ---------- ЗАВАНТАЖЕННЯ ----------
 try:
-    bg = pygame.image.load(os.path.join(BASE_DIR, "img", "john_pork.jpg"))
+    bg = pygame.image.load(os.path.join(BASE_DIR, "img", "john pork.jpg"))
     bg = pygame.transform.scale(bg, (WIDTH, HEIGHT))
-    pick_up = pygame.image.load(os.path.join(BASE_DIR, "img", "pick_up.png")).convert_alpha()
+    pick_up = pygame.image.load(os.path.join(BASE_DIR, "img", "pick up.png")).convert_alpha()
     decline = pygame.image.load(os.path.join(BASE_DIR, "img", "decline.png")).convert_alpha()
 except Exception as e:
     print(f"Помилка: {e}")
