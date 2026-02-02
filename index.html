@@ -2,80 +2,37 @@
 <html lang="uk">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>John Pork Call</title>
 
 <style>
-body, html {
+html, body {
     margin: 0;
     padding: 0;
     width: 100%;
     height: 100%;
-    overflow: hidden;
-    background: #000;
-    font-family: sans-serif;
+    background: black;
+    font-family: Arial, sans-serif;
 }
 
-/* Екран виклику */
+/* Екран */
 #screen {
-    background: url("./img/john_pork.jpg") no-repeat center;
-    background-size: cover;
+    width: 100%;
     height: 100vh;
+    background: url("img/john_pork.jpg") no-repeat center center;
+    background-size: cover;
+
     display: flex;
-    flex-direction: column;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
 }
 
+/* Текст */
 h1 {
     color: white;
-    margin-top: 50px;
-    font-size: 2.2em;
-    text-shadow: 2px 2px 10px #000;
+    font-size: 2.5em;
+    text-shadow: 2px 2px 15px black;
     text-align: center;
-}
-
-.btns {
-    display: flex;
-    gap: 40px;
-    margin-bottom: 80px;
-}
-
-.btn {
-    width: 90px;
-    height: 90px;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.btn:active {
-    transform: scale(0.9);
-}
-
-#videoContainer {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: #000;
-}
-
-video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-#forcePlay {
-    display: none;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 20px;
-    background: rgba(0,255,0,0.6);
-    color: white;
-    border: none;
-    border-radius: 10px;
 }
 </style>
 </head>
@@ -84,36 +41,7 @@ video {
 
 <div id="screen">
     <h1>John Pork is calling...</h1>
-    <div class="btns">
-        <img src="./img/decline.png" class="btn" onclick="alert('Escape is impossible')">
-        <img src="./img/pick_up.png" class="btn" onclick="startCall()">
-    </div>
 </div>
-
-<div id="videoContainer">
-    <video id="porkVideo" src="./singing.mp4" playsinline></video>
-    <button id="forcePlay" onclick="v.play(); this.style.display='none'">▶ PLAY</button>
-</div>
-
-<audio id="ring" src="./sounds/call_sound.mp3" loop></audio>
-
-<script>
-const v = document.getElementById('porkVideo');
-const r = document.getElementById('ring');
-const s = document.getElementById('screen');
-const vc = document.getElementById('videoContainer');
-const fp = document.getElementById('forcePlay');
-
-document.addEventListener('click', () => r.play().catch(()=>{}), { once: true });
-
-function startCall() {
-    r.pause();
-    s.style.display = 'none';
-    vc.style.display = 'block';
-
-    v.play().catch(() => fp.style.display = 'block');
-}
-</script>
 
 </body>
 </html>
