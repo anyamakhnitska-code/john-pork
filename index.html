@@ -8,6 +8,7 @@
         body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #000; font-family: sans-serif; }
         
         #screen { 
+            /* Шлях до фото у папці img */
             background: url('img/john pork.jpg') no-repeat center; 
             background-size: cover; 
             height: 100vh; 
@@ -21,14 +22,11 @@
         .btns { display: flex; gap: 40px; margin-bottom: 80px; }
         .btn { width: 85px; height: 85px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
         
-        /* Відео на весь екран */
         video { 
             display: none; 
             position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%; 
+            top: 0; left: 0; 
+            width: 100%; height: 100%; 
             background: #000; 
             z-index: 100; 
             object-fit: cover; 
@@ -58,7 +56,7 @@
         </div>
     </div>
 
-    <video id="porkVideo" src="Singing.mp4" playsinline webkit-playsinline preload="auto"></video>
+    <video id="porkVideo" src="singing.mp4" playsinline webkit-playsinline preload="auto"></video>
     <audio id="ring" src="sounds/call_sound.mp3" loop preload="auto"></audio>
 
     <script>
@@ -66,31 +64,26 @@
         const r = document.getElementById('ring');
         const s = document.getElementById('screen');
         
-        // Активуємо аудіо-контекст при першому тапі (для мобільних)
-        document.addEventListener('touchstart', function() {
+        // Розблокування звуку для телефонів
+        const unlockAudio = () => {
             if (r.paused && v.style.display !== 'block') {
                 r.play().catch(() => {});
             }
-        }, { once: true });
+            document.removeEventListener('touchstart', unlockAudio);
+            document.removeEventListener('click', unlockAudio);
+        };
 
-        // Для ПК
-        document.addEventListener('click', function() {
-            if (r.paused && v.style.display !== 'block') {
-                r.play().catch(() => {});
-            }
-        }, { once: true });
+        document.addEventListener('touchstart', unlockAudio);
+        document.addEventListener('click', unlockAudio);
 
         function startCall() {
             r.pause();
             s.style.display = 'none';
             v.style.display = 'block';
             
-            // Вмикаємо звук відео та саме відео
-            v.muted = false; 
             v.play().catch(err => {
-                console.error("Відео не вдалося запустити:", err);
-                // Якщо заблоковано, пробуємо з мутом
-                v.muted = true;
+                console.error("Помилка відтворення:", err);
+                v.muted = true; // Спроба запустити без звуку, якщо браузер дуже жорсткий
                 v.play();
             });
 
