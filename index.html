@@ -1,98 +1,20 @@
-<!DOCTYPE html>
-<html lang="uk">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>John Pork Call</title>
-    <style>
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #000; font-family: sans-serif; }
-        
-        /* Екран виклику */
-        #screen { 
-            background: url('img/john pork.jpg') no-repeat center; 
-            background-size: cover; height: 100vh; display: flex; 
-            flex-direction: column; align-items: center; justify-content: space-between; 
-            position: relative; z-index: 10;
-        }
+#screen { 
+    /* Використовуємо %20 замість пробілу для надійності */
+    background: url('img/john%20pork.jpg') no-repeat center; 
+    background-size: cover; 
+    height: 100vh; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: space-between; 
+    position: relative; 
+    z-index: 10;
+}
 
-        h1 { color: white; margin-top: 50px; font-size: 2.2em; text-shadow: 2px 2px 10px #000; text-align: center; }
-        .btns { display: flex; gap: 40px; margin-bottom: 80px; }
-        .btn { width: 90px; height: 90px; cursor: pointer; transition: 0.2s; -webkit-tap-highlight-color: transparent; }
-        .btn:active { transform: scale(0.9); }
-
-        /* Відео та фінал */
-        #videoContainer { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 20; background: #000; }
-        video { width: 100%; height: 100%; object-fit: cover; }
-        
-        #hacked { 
-            display: none; color: #0f0; background: #000; height: 100vh; 
-            font-family: monospace; text-align: center; padding-top: 100px; 
-            z-index: 30; position: relative; 
-        }
-
-        /* Кнопка "Play" якщо відео не пішло саме */
-        #forcePlay {
-            display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            padding: 20px; background: rgba(0,255,0,0.5); color: white; border: none; border-radius: 10px; z-index: 100;
-        }
-    </style>
-</head>
-<body>
-
-    <div id="screen">
-        <h1>John Pork is calling...</h1>
-        <div class="btns">
-            <img src="img/decline.png" class="btn" onclick="alert('Escape is impossible')">
-            <img src="img/pick up.png" class="btn" onclick="startCall()">
-        </div>
+<div id="screen">
+    <h1>John Pork is calling...</h1>
+    <div class="btns">
+        <img src="img/decline.png" class="btn" onclick="alert('Escape is impossible')">
+        <img src="img/pick%20up.png" class="btn" onclick="startCall()">
     </div>
-
-    <div id="videoContainer">
-        <video id="porkVideo" src="singing.mp4" playsinline webkit-playsinline></video>
-        <button id="forcePlay" onclick="v.play(); this.style.display='none'">▶ ЗАПУСТИТИ ВІДЕО</button>
-    </div>
-
-    <audio id="ring" src="sounds/call_sound.mp3" loop></audio>
-
-    <script>
-        const v = document.getElementById('porkVideo');
-        const r = document.getElementById('ring');
-        const s = document.getElementById('screen');
-        const vc = document.getElementById('videoContainer');
-        const fp = document.getElementById('forcePlay');
-
-        // Активуємо звук при першому кліку
-        const unlock = () => {
-            r.play().catch(() => {});
-            document.removeEventListener('click', unlock);
-            document.removeEventListener('touchstart', unlock);
-        };
-        document.addEventListener('click', unlock);
-        document.addEventListener('touchstart', unlock);
-
-        function startCall() {
-            r.pause();
-            s.style.display = 'none';
-            vc.style.display = 'block';
-            
-            v.play().catch(err => {
-                console.log("Автозапуск заблоковано");
-                fp.style.display = 'block'; // Показуємо кнопку запуску
-            });
-
-            v.onended = () => {
-                vc.style.display = 'none';
-                document.getElementById('hacked').style.display = 'block';
-            };
-        }
-    </script>
-
-    <div id="hacked">
-        <h2 style="color:red">> ACCESS GRANTED</h2>
-        <h1 style="color:red">YOU HAVE BEEN HACKED BY JOHN PORK</h1>
-        <p>> IP: 192.168.1.69</p>
-        <p>> STATUS: BACON</p>
-    </div>
-
-</body>
-</html>
+</div>
