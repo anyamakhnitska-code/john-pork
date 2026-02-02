@@ -2,7 +2,7 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>John Pork Call</title>
     <style>
         body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #000; font-family: sans-serif; }
@@ -13,16 +13,6 @@
         h1 { color: white; margin-top: 50px; font-size: 2em; text-shadow: 2px 2px 10px #000; text-align: center; }
         .btns { display: flex; gap: 40px; margin-bottom: 80px; }
         .btn { width: 85px; height: 85px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
-        
-        video { 
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: #000; z-index: 100; object-fit: cover; 
-        }
-        
-        #hacked { 
-            display: none; color: #0f0; background: #000; height: 100vh; padding: 20px; 
-            font-family: monospace; text-align: center; padding-top: 100px; z-index: 200; position: relative; 
-        }
     </style>
 </head>
 <body>
@@ -30,52 +20,17 @@
         <h1>John Pork is calling...</h1>
         <div class="btns">
             <img src="img/decline.png" class="btn" onclick="alert('Escape is impossible')">
-            <img src="img/pick up.png" class="btn" onclick="startCall()">
+            <img src="img/pick up.png" class="btn" onclick="location.href='call.html'">
         </div>
     </div>
 
-    <video id="porkVideo" src="singing.mp4" playsinline webkit-playsinline preload="auto"></video>
-    <audio id="ring" src="sounds/call_sound.mp3" loop preload="auto"></audio>
+    <audio id="ring" src="sounds/call_sound.mp3" loop autoplay></audio>
 
     <script>
-        const v = document.getElementById('porkVideo');
-        const r = document.getElementById('ring');
-        const s = document.getElementById('screen');
-        
-        // Функція для активації аудіо при першому тапі
-        const initMedia = () => {
-            r.play().then(() => r.pause()).catch(() => {});
-            document.removeEventListener('touchstart', initMedia);
-            document.removeEventListener('click', initMedia);
-        };
-        document.addEventListener('touchstart', initMedia);
-        document.addEventListener('click', initMedia);
-
-        function startCall() {
-            r.pause();
-            s.style.display = 'none';
-            v.style.display = 'block';
-            
-            // Запуск відео з примусовим увімкненням звуку
-            v.muted = false;
-            v.play().catch(err => {
-                console.log("Відео заблоковано, запускаю без звуку...");
-                v.muted = true;
-                v.play();
-            });
-
-            v.onended = () => {
-                v.style.display = 'none';
-                document.getElementById('hacked').style.display = 'block';
-            };
-        }
+        // Активуємо звук при першому тапі, якщо autoplay заблоковано
+        document.addEventListener('click', () => {
+            document.getElementById('ring').play().catch(() => {});
+        }, {once: true});
     </script>
-
-    <div id="hacked">
-        <h2>> ACCESS GRANTED</h2>
-        <h1 style="color:red">YOU HAVE BEEN HACKED BY JOHN PORK</h1>
-        <p>> IP: 192.168.1.69</p>
-        <p>> STATUS: BACON</p>
-    </div>
 </body>
 </html>
