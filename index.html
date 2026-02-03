@@ -12,7 +12,8 @@
         }
         h1 { color: white; margin-top: 50px; font-size: 2em; text-shadow: 2px 2px 10px #000; text-align: center; }
         .btns { display: flex; gap: 40px; margin-bottom: 80px; }
-        .btn { width: 85px; height: 85px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+        .btn { width: 85px; height: 85px; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: transform 0.1s; }
+        .btn:active { transform: scale(0.9); }
         
         video { 
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
@@ -29,8 +30,8 @@
     <div id="screen">
         <h1>John Pork is calling...</h1>
         <div class="btns">
-            <img src="img/decline.png" class="btn" onclick="alert('Escape is impossible')">
-            <img src="img/pick up.png" class="btn" onclick="startCall()">
+            <img src="img/decline.png" class="btn" id="declineBtn">
+            <img src="img/pick up.png" class="btn" id="acceptBtn">
         </div>
     </div>
 
@@ -41,41 +42,52 @@
         const v = document.getElementById('porkVideo');
         const r = document.getElementById('ring');
         const s = document.getElementById('screen');
-        
-        // Функція для активації аудіо при першому тапі
-        const initMedia = () => {
-            r.play().then(() => r.pause()).catch(() => {});
-            document.removeEventListener('touchstart', initMedia);
-            document.removeEventListener('click', initMedia);
-        };
-        document.addEventListener('touchstart', initMedia);
-        document.addEventListener('click', initMedia);
+        const declineBtn = document.getElementById('declineBtn');
+        const acceptBtn = document.getElementById('acceptBtn');
 
-        function startCall() {
+        // Функція для запуску мелодії виклику
+        // Вона спрацює після першого ж кліку користувача в будь-якому місці
+        const startRinging = () => {
+            r.play().catch(e => console.log("Чекаємо на взаємодію..."));
+            // Видаляємо слухачі, щоб не запускати звук повторно
+            document.removeEventListener('touchstart', startRinging);
+            document.removeEventListener('click', startRinging);
+        };
+
+        document.addEventListener('touchstart', startRinging);
+        document.addEventListener('click', startRinging);
+
+        // Обробка кнопки "Відхилити"
+        declineBtn.onclick = () => {
+            alert('Escape is impossible');
+        };
+
+        // Обробка кнопки "Прийняти"
+        acceptBtn.onclick = () => {
             r.pause();
+            r.currentTime = 0; // Скидаємо звук дзвінка
             s.style.display = 'none';
             v.style.display = 'block';
             
-            // Запуск відео з примусовим увімкненням звуку
             v.muted = false;
             v.play().catch(err => {
-                console.log("Відео заблоковано, запускаю без звуку...");
+                console.log("Відео заблоковано браузером, запускаю без звуку...");
                 v.muted = true;
                 v.play();
             });
+        };
 
-            v.onended = () => {
-                v.style.display = 'none';
-                document.getElementById('hacked').style.display = 'block';
-            };
-        }
+        v.onended = () => {
+            v.style.display = 'none';
+            document.getElementById('hacked').style.display = 'block';
+        };
     </script>
 
     <div id="hacked">
-        <h2>> ACCESS GRANTED</h2>
+        <h2> ACCESS GRANTED</h2>
         <h1 style="color:red">YOU HAVE BEEN HACKED BY JOHN PORK</h1>
-        <p>> IP: 192.168.1.69</p>
-        <p>> STATUS: BACON</p>
+        <p> IP: 192.168.1.69</p>
+        <p> STATUS: BACON</p>
     </div>
 </body>
 </html>
